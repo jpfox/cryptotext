@@ -43,11 +43,11 @@
             <div id="viewcrypt" style="display:none">
 				<label for="myname">My name:</label>
 				<br />
-				<input type="text" name="myname" id="myname"  style="width:90%;" />
+				<input type="text" name="myname" id="myname"  style="width:96%;" />
 				<br />
 				<label for="mypass">My passphrase:</label>
 				<br />
-				<input type="password" name="mypass" id="mypass"  style="width:90%;" />
+				<input type="password" name="mypass" id="mypass"  style="width:96%;" />
 				<br />
 				<button id="validpass">Validate</button>
 				
@@ -56,23 +56,23 @@
 
 				<label for="mypubkey">My public key:</label>
 				<br />
-				<textarea name="mypubkey" id="mypubkey" rows="3" style="width:90%;" readonly="true" autocomplete="off"></textarea>
+				<textarea name="mypubkey" id="mypubkey" rows="3" style="width:96%;" readonly="true" autocomplete="off"></textarea>
 
 				<br />
 				<br />
 
 				<label for="contactkey">Contact public key:</label>
 				<br />
-				<textarea name="contactkey" id="contactkey" rows="3" style="width:90%;"></textarea>
+				<textarea name="contactkey" id="contactkey" rows="3" style="width:96%;"></textarea>
 
 				<br />
 				<br />
 
 				<label for="cleartext">Clear text:</label>
 				<br />
-				<textarea name="cleartext" id="cleartext" rows="10" style="width:90%;" autocomplete="off"></textarea>
+				<textarea name="cleartext" id="cleartext" rows="10" style="width:96%;" autocomplete="off"></textarea>
 				<br/ >
-				<span id="signature" style="width:90%;"></span>
+				<span id="signature" style="width:96%;"></span>
 
 				<br />
 				<input type="checkbox" name="sign" id="sign" class="cryptaction" disabled="true" value="1" autocomplete="off"/>
@@ -85,9 +85,10 @@
 
 				<label for="cryptedtext">Crypted text:</label>
 				<br />
-				<textarea name="cryptedtext" id="cryptedtext" rows="10" style="width:90%;" autocomplete="off"></textarea>
+				<textarea name="cryptedtext" id="cryptedtext" rows="10" style="width:96%;" autocomplete="off"></textarea>
 
 				<br />
+				<button onclick="window.plugins.socialsharing.share('ctxt://' + document.getElementById('cryptedtext').value)">Send...</button>
 			</div>
 
         </div>

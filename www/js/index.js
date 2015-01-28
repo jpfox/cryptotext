@@ -135,3 +135,10 @@ $( document ).ready(function() {
 	});
 	
 });
+
+function handleOpenURL(url) {
+  setTimeout(function() {
+    var cryptedtextElement = document.getElementById('cryptedtext');
+    cryptedtextElement.value=url.substring(7);
+  }, 0);
+}
