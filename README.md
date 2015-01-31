@@ -11,7 +11,7 @@ Follow instructions on [Cordova documentation site](http://cordova.apache.org/do
      $ cordova create cryptotext fr.jpfox.cryptotext CryptoText
      $ cd cryptotext/
      $ cordova platform add android
-     $ cordova plugin add https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin.git --variable URL_SCHEME=ctxt
+     $ cordova plugin add http://github.com/jpfox/Custom-URL-scheme.git --variable URL_SCHEME=https --variable HOST=jpfox.fr --variable PATH_PREFIX="/c/"
      $ cordova plugin add nl.x-services.plugins.socialsharing
 
 ### Get source from github repository into this existing structure
