@@ -5,7 +5,8 @@ var cryptico = (function() {
 
     aes.Init();
 
-    var base64Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+    // var base64Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+    var base64Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.';
 
     my.b256to64 = function(t) {
         var a, c, n;
@@ -318,61 +319,64 @@ var cryptico = (function() {
     
     my.encrypt = function(plaintext, publickeystring, signingkey)
     {
+		var content = { t: plaintext };
         var cipherblock = "";
+        var json = "";
         var aeskey = my.generateAESKey();
         try
         {
             var publickey = my.publicKeyFromString(publickeystring);
-            cipherblock += my.b16to64(publickey.encrypt(my.bytes2string(aeskey))) + "?";
+            cipherblock += my.b16to64(publickey.encrypt(my.bytes2string(aeskey))) + "_";
         }
         catch(err)
         {
             return {status: "Invalid public key"};
         }
+        
         if(signingkey)
         {
-            signString = cryptico.b16to64(signingkey.signString(plaintext, "sha256"));
-            plaintext += "::52cee64bb3a38f6403386519a39ac91c::";
-            plaintext += cryptico.publicKeyString(signingkey);
-            plaintext += "::52cee64bb3a38f6403386519a39ac91c::";
-            plaintext += signString;
+            signString   = cryptico.b16to64(signingkey.signString(plaintext, "sha256"));
+            content.k  = cryptico.publicKeyString(signingkey);
+            content.s = signString;
         }
-        cipherblock += my.encryptAESCBC(plaintext, aeskey);    
-        return {status: "success", cipher: cipherblock};
+        json = JSON.stringify(content);
+        cipherblock += my.encryptAESCBC(json, aeskey);
+        return {status: "success", cipher: '~' + cipherblock + '~'};
     }
 
     my.decrypt = function(ciphertext, key)
     {
-        var cipherblock = ciphertext.split("?");
+		var cipherparse = ciphertext.split("~");
+        var cipherblock = cipherparse[1].split("_");
         var aeskey = key.decrypt(my.b64to16(cipherblock[0]));
         if(aeskey == null)
         {
             return {status: "failure"};
         }
         aeskey = my.string2bytes(aeskey);
-        var plaintext = my.decryptAESCBC(cipherblock[1], aeskey).split("::52cee64bb3a38f6403386519a39ac91c::");
-        if(plaintext.length == 3)
+        var content = JSON.parse(my.decryptAESCBC(cipherblock[1], aeskey));
+        if(content.s)
         {
-            var publickey = my.publicKeyFromString(plaintext[1]);
-            var signature = my.b64to16(plaintext[2]);
-            if(publickey.verifyString(plaintext[0], signature))
+            var publickey = my.publicKeyFromString(content.k);
+            var signature = my.b64to16(content.s);
+            if(publickey.verifyString(content.t, signature))
             {
                 return {status: "success", 
-                        plaintext: plaintext[0], 
+                        plaintext: content.t, 
                         signature: "verified", 
                         publicKeyString: my.publicKeyString(publickey)};
             }
             else
             {
                 return {status: "success", 
-                        plaintext: plaintext[0], 
+                        plaintext: content.t, 
                         signature: "forged", 
                         publicKeyString: my.publicKeyString(publickey)};
             }
         }
         else
         {
-            return {status: "success", plaintext: plaintext[0], signature: "unsigned"};
+            return {status: "success", plaintext: content.t, signature: "not signed"};
         }
     }
 

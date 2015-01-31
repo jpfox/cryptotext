@@ -16,6 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ 
+var isApp = !!window.cordova;
+ 
 var app = {
     // Application Constructor
     initialize: function() {
@@ -47,7 +50,11 @@ var app = {
     }
 };
 
-app.initialize();
+if(isApp) { // cordova
+	app.initialize();
+} else { // browser
+	app.receivedEvent('deviceready');
+}
 
 var bits = 512;
 var myRSAKey = null;
@@ -83,14 +90,7 @@ $( document ).ready(function() {
 	});
 	
 	// select on focus
-	$("textarea").mouseup(function(e){
-		// fixes safari/chrome problem
-		e.preventDefault();
-	})
-	.focus(function(e){
-		$(this).select();
-	})
-	.click(function(e){
+	$("textarea").focus(function(e){
 		$(this).select();
 	});
 	
@@ -134,11 +134,29 @@ $( document ).ready(function() {
 
 	});
 	
+	// send
+	if(isApp) {
+		$('#send').click(function(){
+			window.plugins.socialsharing.share('https://jpfox.fr/c/#' + $('#cryptedtext').val());
+		});
+	} else {
+		$('#send').click(function(){
+			window.location.href = "mailto:?subject=CryptoText&body=https://jpfox.fr/c/#" + $('#cryptedtext').val();
+		});
+	}
+	
+	// parse #
+	if(!isApp) {
+		handleOpenURL(window.location.hash);
+	}
+	
 });
 
 function handleOpenURL(url) {
-  setTimeout(function() {
-    var cryptedtextElement = document.getElementById('cryptedtext');
-    cryptedtextElement.value=url.substring(7);
-  }, 0);
+  if(url.indexOf('~')!=-1) {
+    setTimeout(function() {
+      var cryptedtextElement = document.getElementById('cryptedtext');
+      cryptedtextElement.value=url.substring(url.indexOf('~'));
+    }, 0);
+  }
 }

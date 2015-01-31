@@ -88,11 +88,11 @@
 				<textarea name="cryptedtext" id="cryptedtext" rows="10" style="width:96%;" autocomplete="off"></textarea>
 
 				<br />
-				<button onclick="window.plugins.socialsharing.share('ctxt://' + document.getElementById('cryptedtext').value)">Send...</button>
+				<button id="send" class="cryptaction" disabled="true">Send...</button>
 			</div>
 
         </div>
-        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>        
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>
