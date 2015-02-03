@@ -40,6 +40,7 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
+		/*
         var devicereadyElement = document.getElementById(id);
         var viewcryptElement = document.getElementById('viewcrypt');
 
@@ -47,6 +48,8 @@ var app = {
         
         devicereadyElement.setAttribute('style', 'display:none;');
         viewcryptElement.setAttribute('style', 'display:block;');
+        */
+        $.mobile.navigate( "#login" );
     }
 };
 
@@ -59,17 +62,22 @@ if(isApp) { // cordova
 var bits = 512;
 var myRSAKey = null;
 
+var nextaction = '#mycryptoident';
+
 $( document ).ready(function() {
 	
+	
+	
 	// disable crypt action on pass change
-	$('#mypass').change(function(){
+	$('#mypass, #pseudo').change(function(){
+		$('checkbox.cryptaction').checkboxradio("disable");
 		$('.cryptaction').prop( "disabled", true );
 		$('#mypubkey').val('');
 	});
 	
 	// generate key
 	$('#validpass').click(function(){
-		var name = $('#myname').val();
+		var pseudo = $('#pseudo').val();
 		var pass = $('#mypass').val();
 		if(pass.length<=5)
 		{
@@ -77,17 +85,19 @@ $( document ).ready(function() {
 			pass = null;
 			return;
 		}
-		if(name.length==0)
+		if(pseudo.length==0)
 		{
-			alert("You have to enter your name");
+			alert("You have to enter a pseudo");
 			pass = null;
 			return;
 		}
-		myRSAKey = cryptico.generateRSAKey(name + '/' + pass, bits);
+		myRSAKey = cryptico.generateRSAKey(pseudo + '/' + pass, bits);
 		$('#mypubkey').val(cryptico.publicKeyString(myRSAKey));
 		$('checkbox.cryptaction').checkboxradio("enable");
 		$('.cryptaction').prop( "disabled", false );
 		pass = null;
+		$.mobile.navigate( nextaction );
+		
 	});
 	
 	// select on focus
@@ -95,6 +105,19 @@ $( document ).ready(function() {
 		$(this).select();
 	});
 	
+	
+	// Send ident
+	$('#mailident').click(function(){
+		window.location.assign("mailto:?subject=CryptoText&body=https://jpfox.fr/c/#i~" + $('#mypubkey').val() + "~");
+	});
+	$('#smsident').click(function(){
+		window.location.assign("smsto:?body=https://jpfox.fr/c/#i~" + $('#mypubkey').val() + "~");
+	});
+	$('#shareident').click(function(){
+		window.plugins.socialsharing.share('https://jpfox.fr/c/#i~' + $('#mypubkey').val() + "~");
+	});
+	
+
 	// encrypt
 	$('#encrypt').click(function(){
 		var sign = $('#sign').prop("checked");
@@ -138,11 +161,11 @@ $( document ).ready(function() {
 	// send
 	if(isApp) {
 		$('#send').click(function(){
-			window.plugins.socialsharing.share('https://jpfox.fr/c/#' + $('#cryptedtext').val());
+			window.plugins.socialsharing.share('https://jpfox.fr/c/#m' + $('#cryptedtext').val());
 		});
 	} else {
 		$('#send').click(function(){
-			window.location.href = "mailto:?subject=CryptoText&body=https://jpfox.fr/c/#" + $('#cryptedtext').val();
+			window.location.href = "mailto:?subject=CryptoText&body=https://jpfox.fr/c/#m" + $('#cryptedtext').val();
 		});
 	}
 	
@@ -154,7 +177,7 @@ $( document ).ready(function() {
 });
 
 function handleOpenURL(url) {
-  if(url.indexOf('~')!=-1) {
+  if(url.indexOf('m~')!=-1) {
     setTimeout(function() {
       var cryptedtextElement = document.getElementById('cryptedtext');
       cryptedtextElement.value=url.substring(url.indexOf('~'));

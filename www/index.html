@@ -38,6 +38,84 @@
         <title>CryptoText</title>
     </head>
     <body>
+		<!-- loading page -->
+		<div data-role="page" id="loading">
+			<div data-role="header">
+				<h1>CryptoText</h1>
+			</div>
+			<div role="main" class="ui-content">
+				<p>loading...</p>
+			</div>
+		</div>
+		
+		<!-- login page -->
+		<div data-role="page" id="login">
+			<div data-role="header">
+				<h1>Identification</h1>
+			</div>
+			<div role="main" class="ui-content">
+				<label for="pseudo">My pseudo:</label>
+				<input type="text" name="pseudo" id="pseudo" placeholder="Keep it personnal..."/>
+				<br />
+				<label for="mypass">My passphrase:</label>
+				<input type="password" name="mypass" id="mypass" placeholder="Never give it to any body !" />
+				<br />
+				<button id="validpass" class="ui-shadow ui-btn ui-corner-all ui-mini">Identify me</button>
+			</div>
+
+		</div>
+		
+		<!-- My CryptoIdent -->
+		<div data-role="page" id="mycryptoident">
+			<div data-role="header">
+				<h1>My CryptoIdent</h1>
+			</div>
+			<div role="main" class="ui-content">
+				<label for="myname">My public name:</label>
+				<input type="text" name="myname" id="myname" placeholder="sent with message when signed" />
+				<br />
+				<label for="myemail">My email:</label>
+				<input type="text" name="myemail" id="myemail" placeholder="me@domain.tld" />
+				<br />
+				<label for="myphone">My phone number:</label>
+				<input type="tel" name="myphone" id="myphone" placeholder="use international format (+99999...)"/>
+				<br />
+				<label for="mypubkey">My public key</label>
+				<input type="text" name="mypubkey" id="mypubkey" readonly="true" autocomplete="off"/>
+				<button id="validident" class="ui-btn ui-mini ui-btn-inline ui-icon-check ui-btn-icon-left">Save ident</button>
+				<button id="mailident" class="ui-btn ui-mini ui-btn-inline ui-icon-mail ui-btn-icon-left">Send by mail</button>
+				<button id="smsident" class="ui-btn ui-mini ui-btn-inline ui-icon-comment ui-btn-icon-left">Send by SMS</button>
+				<button id="shareident" class="ui-btn ui-mini ui-btn-inline ui-icon-cloud ui-btn-icon-left">Social share</button>
+				
+			</div>
+
+		</div>
+		
+		<!-- CryptoIdents -->
+		<div data-role="page" id="cryptoidents">
+			<div data-role="header">
+				<h1>CryptoIdents book</h1>
+			</div>
+			<div role="main" class="ui-content">
+				<ul data-role="listview" data-filter="true" data-filter-placeholder="Search contact..." data-inset="true" id="contactlist">
+					<li><a href="#">Alice</a></li>
+					<li><a href="#">Bob</a></li>
+					<li><a href="#">Chris</a></li>
+					<li><a href="#">John</a></li>
+					<li><a href="#">Julie</a></li>
+					<li><a href="#">Oscar</a></li>
+				</ul>
+			</div>
+
+		</div>
+		
+		
+			
+				
+			
+		
+		
+		
         <div class="app">
             <h1>CryptoText</h1>
             <div id="deviceready" class="blink">
@@ -78,7 +156,7 @@
 				<span id="signature" style="width:96%;"></span>
 
 				<br />
-				<input type="checkbox" name="sign" id="sign" class="cryptaction" disabled="true" value="1" >
+				<input type="checkbox" name="sign" id="sign" class="cryptaction" value="1" >
 				<label for="sign">sign text</label>
 				<br />
 				<button id="encrypt" class="cryptaction" disabled="true"> v  Encrypt with contact public key v </button>
