@@ -85,6 +85,7 @@ $( document ).ready(function() {
 		}
 		myRSAKey = cryptico.generateRSAKey(name + '/' + pass, bits);
 		$('#mypubkey').val(cryptico.publicKeyString(myRSAKey));
+		$('checkbox.cryptaction').checkboxradio("enable");
 		$('.cryptaction').prop( "disabled", false );
 		pass = null;
 	});
