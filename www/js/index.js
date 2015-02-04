@@ -107,16 +107,29 @@ $( document ).ready(function() {
 	
 	
 	// Send ident
-	$('#mailident').click(function(){
-		window.location.assign("mailto:?subject=CryptoText&body=https://jpfox.fr/c/#i~" + $('#mypubkey').val() + "~");
-	});
-	$('#smsident').click(function(){
-		window.location.assign("smsto:?body=https://jpfox.fr/c/#i~" + $('#mypubkey').val() + "~");
-	});
-	$('#shareident').click(function(){
-		window.plugins.socialsharing.share('https://jpfox.fr/c/#i~' + $('#mypubkey').val() + "~");
-	});
-	
+	if(isApp) // app
+	{
+		$('#mailident').click(function(){
+			window.plugins.socialsharing.shareViaEmail("https://jpfox.fr/c/#i~" + $('#mypubkey').val() + "~", 'CryptoText ident',null,null,null,null,function(msg) {alert('error: ' + msg)});
+		});
+		$('#smsident').click(function(){
+			window.plugins.socialsharing.shareViaSMS("https://jpfox.fr/c/#i~" + $('#mypubkey').val() + "~", null, null, function(msg) {alert('error: ' + msg)});
+		});
+		$('#shareident').click(function(){
+			window.plugins.socialsharing.share('https://jpfox.fr/c/#i~' + $('#mypubkey').val() + "~");
+		});
+	}
+	else // browser
+	{
+		$('#mailident').click(function(){
+			window.location = ("mailto:?subject=CryptoText&body=https://jpfox.fr/c/#i~" + $('#mypubkey').val() + "~");
+		});
+		$('#smsident').click(function(){
+			window.location = ("smsto:?body=https://jpfox.fr/c/#i~" + $('#mypubkey').val() + "~");
+		});
+		$('#shareident').hide();
+	}
+		
 
 	// encrypt
 	$('#encrypt').click(function(){
@@ -179,8 +192,14 @@ $( document ).ready(function() {
 function handleOpenURL(url) {
   if(url.indexOf('m~')!=-1) {
     setTimeout(function() {
-      var cryptedtextElement = document.getElementById('cryptedtext');
-      cryptedtextElement.value=url.substring(url.indexOf('~'));
+      $('#cryptedtext').val(url.substring(url.indexOf('~')));
+      nextaction = 'decrypt';
+    }, 0);
+  }
+  else if(url.indexOf('i~')!=-1) {
+    setTimeout(function() {
+      $('#pubkey').val(url.substring(url.indexOf('~')));
+      nextaction = 'criptoident';
     }, 0);
   }
 }
