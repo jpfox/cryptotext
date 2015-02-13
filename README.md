@@ -17,9 +17,9 @@ Follow instructions on [Cordova documentation site](http://cordova.apache.org/do
 ### Get source from github repository into this existing structure
 
      $ git init
-     $ git remote add origin http://github/jpfox/cryptotext
+     $ git remote add origin https://github.com/jpfox/cryptotext.git
      $ git fetch
-     $ git checkout -t origin/master
+     $ git checkout -f -t origin/master
 
 ## Build application
 
