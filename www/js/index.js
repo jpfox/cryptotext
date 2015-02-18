@@ -91,8 +91,8 @@ $( document ).ready(function() {
 			pass = null;
 			return;
 		}
-		myRSAKey = cryptico.generateRSAKey(pseudo + '/' + pass, bits);
-		$('#mypubkey').val(cryptico.publicKeyString(myRSAKey));
+		myRSAKey = cryptotext.generateRSAKey(pseudo + '/' + pass, bits);
+		$('#mypubkey').val('(!'+cryptotext.publicKeyString(myRSAKey)+')');
 		$('checkbox.cryptaction').checkboxradio("enable");
 		$('.cryptaction').prop( "disabled", false );
 		pass = null;
@@ -110,22 +110,22 @@ $( document ).ready(function() {
 	if(isApp) // app
 	{
 		$('#mailident').click(function(){
-			window.plugins.socialsharing.shareViaEmail("https://jpfox.fr/c/#i~" + $('#mypubkey').val() + "~", 'CryptoText ident',null,null,null,null,function(msg) {alert('error: ' + msg)});
+			window.plugins.socialsharing.shareViaEmail("https://jpfox.fr/c/#" + $('#mypubkey').val(), 'CryptoText ident',null,null,null,null,function(msg) {alert('error: ' + msg)});
 		});
 		$('#smsident').click(function(){
-			window.plugins.socialsharing.shareViaSMS("https://jpfox.fr/c/#i~" + $('#mypubkey').val() + "~", null, null, function(msg) {alert('error: ' + msg)});
+			window.plugins.socialsharing.shareViaSMS("https://jpfox.fr/c/#" + $('#mypubkey').val(), null, null, function(msg) {alert('error: ' + msg)});
 		});
 		$('#shareident').click(function(){
-			window.plugins.socialsharing.share('https://jpfox.fr/c/#i~' + $('#mypubkey').val() + "~");
+			window.plugins.socialsharing.share('https://jpfox.fr/c/#' + $('#mypubkey').val());
 		});
 	}
 	else // browser
 	{
 		$('#mailident').click(function(){
-			window.location = ("mailto:?subject=CryptoText&body=https://jpfox.fr/c/#i~" + $('#mypubkey').val() + "~");
+			window.location = ("mailto:?subject=CryptoText&body=" + encodeURIComponent('https://jpfox.fr/c/#'+$('#mypubkey').val()));
 		});
 		$('#smsident').click(function(){
-			window.location = ("smsto:?body=https://jpfox.fr/c/#i~" + $('#mypubkey').val() + "~");
+			window.location = ("smsto:?body=" + encodeURIComponent('https://jpfox.fr/c/#'+$('#mypubkey').val()));
 		});
 		$('#shareident').hide();
 	}
@@ -135,7 +135,7 @@ $( document ).ready(function() {
 	$('#encrypt').click(function(){
 		var sign = $('#sign').prop("checked");
 		try {
-			var encryptionResult = cryptico.encrypt($('#cleartext').val(), $('#contactkey').val(), sign?myRSAKey:null);
+			var encryptionResult = cryptotext.encrypt($('#cleartext').val(), $('#contactkey').val(), sign?myRSAKey:null);
 			$('#cryptedtext').val(encryptionResult.cipher);
 		} catch(e) {
 			$('#cryptedtext').val('');
@@ -146,7 +146,7 @@ $( document ).ready(function() {
 	// decrypt
 	$('#decrypt').click(function(){
 		try {
-			var decryptionResult = cryptico.decrypt($('#cryptedtext').val(), myRSAKey);
+			var decryptionResult = cryptotext.decrypt($('#cryptedtext').val(), myRSAKey);
 			$('#cleartext').val(decryptionResult.plaintext);
 			if(decryptionResult.status=="success") {
 				if(decryptionResult.signature=='verified')
@@ -174,11 +174,11 @@ $( document ).ready(function() {
 	// send
 	if(isApp) {
 		$('#send').click(function(){
-			window.plugins.socialsharing.share('https://jpfox.fr/c/#m' + $('#cryptedtext').val());
+			window.plugins.socialsharing.share('https://jpfox.fr/c/#' + $('#cryptedtext').val());
 		});
 	} else {
 		$('#send').click(function(){
-			window.location.href = "mailto:?subject=CryptoText&body=https://jpfox.fr/c/#m" + $('#cryptedtext').val();
+			window.location.href = "mailto:?subject=CryptoText&body=https://jpfox.fr/c/#" + $('#cryptedtext').val();
 		});
 	}
 	
@@ -190,16 +190,11 @@ $( document ).ready(function() {
 });
 
 function handleOpenURL(url) {
-  if(url.indexOf('m~')!=-1) {
-    setTimeout(function() {
-      $('#cryptedtext').val(url.substring(url.indexOf('~')));
-      nextaction = 'decrypt';
-    }, 0);
-  }
-  else if(url.indexOf('i~')!=-1) {
-    setTimeout(function() {
-      $('#pubkey').val(url.substring(url.indexOf('~')));
-      nextaction = 'criptoident';
-    }, 0);
-  }
+	if(url.indexOf('(')!=-1) {
+		setTimeout(function() {
+			$('#cryptedtext').val(url.substring(url.indexOf('(')));
+			nextaction = '#decrypt';
+		}, 0);
+	}
+
 }
