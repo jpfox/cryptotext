@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="fr.jpfox.cryptotext" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>CryptoText</name>
+    <description>
+        A sample Apache Cordova application that responds to the deviceready event.
+    </description>
+    <author email="dev@jpfox.fr" href="https://www.jpfox.fr/">
+        Jean-Pierre Morfin
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <icon src="/res/drawable/icon.png" cdv:platform="android" />
+    <icon src="/res/drawable-ldpi/icon.png" cdv:platform="android" cdv:density="ldpi" />
+    <icon src="/res/drawable-mdpi/icon.png" cdv:platform="android" cdv:density="mdpi" />
+    <icon src="/res/drawable-hdpi/icon.png" cdv:platform="android" cdv:density="hdpi" />
+    <icon src="/res/drawable-xhdpi/icon.png" cdv:platform="android" cdv:density="xhdpi" />
+</widget>
+
