@@ -62,7 +62,6 @@
 				<br />
 				<button id="validpass" class="ui-shadow ui-btn ui-corner-all ui-mini">Log me in</button>
 			</div>
-
 		</div>
 		
 		<!-- My CryptoIdent -->
@@ -85,7 +84,6 @@
 				<button id="shareident" class="ui-btn ui-mini ui-btn-inline ui-icon-cloud ui-btn-icon-left">Social share</button>
 				
 			</div>
-
 		</div>
 		
 		<!-- CryptoIdents -->
@@ -107,64 +105,51 @@
 		
 		
 			
+		<!-- Decrypt-->
+		<div data-role="page" id="decrypt">
+			<div data-role="header">
+				<h1>Decryption</h1>
+			</div>
+			<div role="main" class="ui-content">
+				<label for="cryptedtext">Crypted message:</label>
+				<textarea name="cryptedtext" id="cryptedtext" placeholder="(paste crypted message here)" autocomplete="off"></textarea>
+
+				<button id="decrypt" class="ui-btn ui-mini ui-btn-inline ui-icon-eye ui-btn-icon-left">Decrypt</button>				
+
+				<span id="signature"> </span><br/>
+
+				<label for="decryptedtext">Decrypted text:</label>
+				<textarea name="decryptedtext" id="decryptedtext" placeholder="(paste crypted message here)" autocomplete="off"></textarea>
+			</div>
+		</div>
+
+		<!-- Encrypt-->
+		<div data-role="page" id="encrypt">
+			<div data-role="header">
+				<h1>Encryption</h1>
+			</div>
+			<div role="main" class="ui-content">
+				<label for="cleartext">Text to encrypt:</label>
+				<textarea name="cleartext" id="cleartext" placeholder="Type or paste your text here" autocomplete="off"></textarea>
 				
-			
-		
-		
-		
-        <div class="app">
-            <h1>CryptoText</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-            </div>
-            <div id="viewcrypt" style="display:none">
-				<label for="myname">My name:</label>
-				<br />
-				<input type="text" name="myname" id="myname"  style="width:96%;" />
-				<br />
-				<label for="mypass">My passphrase:</label>
-				<br />
-				<input type="password" name="mypass" id="mypass"  style="width:96%;" />
-				<br />
-				<button id="validpass">Validate</button>
-				
-				<br />
-				<br />
+				<label for="contactkey">Text to encrypt:</label>
+				<textarea name="contactkey" id="contactkey" placeholder="(!paste recipient public key here)"></textarea>
 
-				<br />
-				<br />
-
-				<label for="contactkey">Contact public key:</label>
-				<br />
-				<textarea name="contactkey" id="contactkey" rows="3" style="width:96%;"></textarea>
-
-				<br />
-				<br />
-
-				<label for="cleartext">Clear text:</label>
-				<br />
-				<textarea name="cleartext" id="cleartext" rows="10" style="width:96%;" autocomplete="off"></textarea>
-				<br/ >
-				<span id="signature" style="width:96%;"></span>
-
-				<br />
 				<input type="checkbox" name="sign" id="sign" class="cryptaction" value="1" >
 				<label for="sign">sign text</label>
-				<br />
-				<button id="encrypt" class="cryptaction" disabled="true"> v  Encrypt with contact public key v </button>
-				<br />
-				<button id="decrypt" class="cryptaction" disabled="true"> ^  Decrypt with my private key ^ </button>
-				<br />
+				<button id="encrypt" class="ui-btn ui-mini ui-btn-inline ui-icon-lock ui-btn-icon-left">Decrypt</button>				
 
-				<label for="cryptedtext">Crypted text:</label>
-				<br />
-				<textarea name="cryptedtext" id="cryptedtext" rows="10" style="width:96%;" autocomplete="off"></textarea>
+				<label for="encryptedtext">Crypted message:</label>
+				<textarea name="encryptedtext" id="encryptedtext" placeholder="" autocomplete="off"></textarea>
+				
+				<span id="signature"> </span><br/>
 
-				<br />
-				<button id="send" class="cryptaction" disabled="true">Send...</button>
+				<button id="mailcrypted" class="ui-btn ui-mini ui-btn-inline ui-icon-mail ui-btn-icon-left">Send by mail</button>
+				<button id="smscrypted" class="ui-btn ui-mini ui-btn-inline ui-icon-comment ui-btn-icon-left">Send by SMS</button>
+				<button id="sharecrypted" class="ui-btn ui-mini ui-btn-inline ui-icon-cloud ui-btn-icon-left">Social share</button>
 			</div>
+		</div>
 
-        </div>
         <script type="text/javascript" src="cordova.js"></script>        
         <script type="text/javascript" src="js/index.js"></script>
     </body>

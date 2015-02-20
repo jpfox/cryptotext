@@ -69,11 +69,12 @@ $( document ).ready(function() {
 	
 	
 	// disable crypt action on pass change
+	/*
 	$('#mypass, #pseudo').change(function(){
 		$('checkbox.cryptaction').checkboxradio("disable");
 		$('.cryptaction').prop( "disabled", true );
 		$('#mypubkey').val('');
-	});
+	});*/
 	
 	// generate key
 	$('#validpass').click(function(){
@@ -130,15 +131,39 @@ $( document ).ready(function() {
 		$('#shareident').hide();
 	}
 		
+	// Send crypted message
+	if(isApp) // app
+	{
+		$('#mailident').click(function(){
+			window.plugins.socialsharing.shareViaEmail("https://jpfox.fr/c/#" + $('#encryptedtext').val(), 'CryptoText message',null,null,null,null,function(msg) {alert('error: ' + msg)});
+		});
+		$('#smsident').click(function(){
+			window.plugins.socialsharing.shareViaSMS("https://jpfox.fr/c/#" + $('#encryptedtext').val(), null, null, function(msg) {alert('error: ' + msg)});
+		});
+		$('#shareident').click(function(){
+			window.plugins.socialsharing.share('https://jpfox.fr/c/#' + $('#encryptedtext').val());
+		});
+	}
+	else // browser
+	{
+		$('#mailident').click(function(){
+			window.location = ("mailto:?subject=CryptoText&body=" + encodeURIComponent('https://jpfox.fr/c/#'+$('#encryptedtext').val()));
+		});
+		$('#smsident').click(function(){
+			window.location = ("smsto:?body=" + encodeURIComponent('https://jpfox.fr/c/#'+$('#encryptedtext').val()));
+		});
+		$('#shareident').hide();
+	}
+		
 
 	// encrypt
 	$('#encrypt').click(function(){
 		var sign = $('#sign').prop("checked");
 		try {
 			var encryptionResult = cryptotext.encrypt($('#cleartext').val(), $('#contactkey').val(), sign?myRSAKey:null);
-			$('#cryptedtext').val(encryptionResult.cipher);
+			$('#encryptedtext').val(encryptionResult.cipher);
 		} catch(e) {
-			$('#cryptedtext').val('');
+			$('#encryptedtext').val('');
 			$('#signature').html(e.message);
 		}
 	});
@@ -147,7 +172,7 @@ $( document ).ready(function() {
 	$('#decrypt').click(function(){
 		try {
 			var decryptionResult = cryptotext.decrypt($('#cryptedtext').val(), myRSAKey);
-			$('#cleartext').val(decryptionResult.plaintext);
+			$('#decryptedtext').val(decryptionResult.plaintext);
 			if(decryptionResult.status=="success") {
 				if(decryptionResult.signature=='verified')
 				{
@@ -165,22 +190,12 @@ $( document ).ready(function() {
 				$('#signature').text("decryption failed !");
 			}
 		} catch(e) {
-			$('#cleartext').val('');
+			$('#decryptedtext').val('');
 			$('#signature').html(e.message);
 		}
 
 	});
 	
-	// send
-	if(isApp) {
-		$('#send').click(function(){
-			window.plugins.socialsharing.share('https://jpfox.fr/c/#' + $('#cryptedtext').val());
-		});
-	} else {
-		$('#send').click(function(){
-			window.location.href = "mailto:?subject=CryptoText&body=https://jpfox.fr/c/#" + $('#cryptedtext').val();
-		});
-	}
 	
 	// parse #
 	if(!isApp) {
