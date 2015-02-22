@@ -346,20 +346,23 @@ var cryptotext = (function() {
 
 	my.decrypt = function(ciphertext, key)
 	{
-		var cipherparse = ciphertext.match(/\(((\w|\-|\.|\!)*)\)/);
-        if(!cipherparse)
+alert('ciphertext:'+ciphertext);
+		var cipherparse = ciphertext.match(/\(((\w|\-|\.|\=|\!)*)\)/);
+        if(!cipherparse || !cipherparse[1])
             return {status: "Invalid content"};
-            
+
+		cipherparse = cipherparse[1];
+
 		if(cipherparse.charAt(0)=='!')
 		{
 			return {status: "success", 
 					plaintext: "Public key received", 
 					signature: "verified", 
-					publicKeyString: my.publicKeyString(publickey)};
+					publicKeyString: cipherparse.substring(1)};
 		}
 		else
 		{
-			var cipherblock = cipherparse[1].split("_");
+			var cipherblock = cipherparse.split("_");
 			var aeskey = key.decrypt(my.b64to16(cipherblock[0]));
 			if(aeskey == null)
 			{

@@ -18,7 +18,11 @@
  */
  
 var isApp = !!window.cordova;
- 
+var bits = 512;
+var myRSAKey = null;
+
+var nextaction = '#mycryptoident'; // default
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -56,17 +60,12 @@ var app = {
 if(isApp) { // cordova
 	app.initialize();
 } else { // browser
+	handleOpenURL(window.location.hash); // parse #
 	app.receivedEvent('deviceready');
 }
 
-var bits = 512;
-var myRSAKey = null;
-
-var nextaction = '#mycryptoident';
 
 $( document ).ready(function() {
-	
-	
 	
 	// disable crypt action on pass change
 	/*
@@ -196,19 +195,15 @@ $( document ).ready(function() {
 
 	});
 	
-	
-	// parse #
-	if(!isApp) {
-		handleOpenURL(window.location.hash);
-	}
-	
 });
 
 function handleOpenURL(url) {
+	alert('handleOpenURL...');
 	if(url.indexOf('(')!=-1) {
 		setTimeout(function() {
 			$('#cryptedtext').val(url.substring(url.indexOf('(')));
 			nextaction = '#decrypt';
+			alert('handleOpenURL' + " : " + nextaction);
 		}, 0);
 	}
 
